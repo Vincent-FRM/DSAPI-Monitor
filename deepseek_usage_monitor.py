@@ -58,7 +58,7 @@ except Exception:
     HAS_TRAY = False
 
 APP_NAME = "DSAPI-Monitor"
-VERSION = "V1.4.0"
+VERSION = "V1.4.1"
 LANG_ZH = "zh_CN"
 LANG_EN = "en_US"
 DEFAULT_LANG = LANG_ZH
@@ -604,8 +604,14 @@ def prune_state(valid_names):
 # ─────────────────────────── HTTP ───────────────────────────
 
 def http_get_json(url, headers, timeout=TIMEOUT):
+    # urllib.request.urlopen 会缓存首次创建的全局 opener，其中也包含当时的
+    # Windows 系统代理。用户运行期间开关 Clash/VPN 后，旧 opener 仍会访问
+    # 已关闭的本地代理，必须重启程序才恢复。每次请求新建 opener，确保读取
+    # 当前代理设置；重试时也会再次刷新。
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
+    proxies = urllib.request.getproxies()
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler(proxies))
+    with opener.open(req, timeout=timeout) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
