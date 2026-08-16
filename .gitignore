@@ -1,0 +1,6 @@
+__pycache__/
+build/
+dist/
+*.spec
+dsm_config.json
+dsm_state.json

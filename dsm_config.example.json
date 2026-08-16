@@ -1,0 +1,14 @@
+{
+  "accounts": [
+    {
+      "ds_account": "示例账号",
+      "name": "示例 Key",
+      "api_key_protected": "",
+      "platform_token_protected": ""
+    }
+  ],
+  "refresh_seconds": 30,
+  "timezone": "GMT+8",
+  "pin_corner": true,
+  "language": "zh_CN"
+}
